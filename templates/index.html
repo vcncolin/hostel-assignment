@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Hostel Room Assignment</title>
+  <style>
+    :root { color-scheme: light dark; }
+    * { box-sizing: border-box; }
+    body {
+      font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
+      margin: 0 auto; padding: 1.5rem; max-width: 1100px; line-height: 1.5;
+    }
+    h1 { font-size: 1.4rem; margin: 0 0 .25rem; }
+    .sub { color: gray; margin: 0 0 1.25rem; }
+    .editors { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+    @media (max-width: 800px) { .editors { grid-template-columns: 1fr; } }
+    .editors h2 { font-size: 1rem; margin: 0 0 .4rem; }
+    textarea {
+      width: 100%; height: 340px; font-family: ui-monospace, Menlo, Consolas, monospace;
+      font-size: .8rem; padding: .6rem; border: 1px solid #8886; border-radius: 8px;
+      resize: vertical;
+    }
+    .actions { margin: 1rem 0 0; display: flex; gap: .75rem; align-items: center; }
+    button {
+      font-size: 1rem; padding: .55rem 1.4rem; border: 0; border-radius: 8px;
+      background: #2563eb; color: #fff; cursor: pointer;
+    }
+    button:hover { background: #1d4ed8; }
+    .error {
+      margin-top: 1rem; padding: .75rem 1rem; border-radius: 8px;
+      background: #fee2e2; color: #991b1b; border: 1px solid #fca5a5;
+    }
+    .result { margin-top: 1.5rem; }
+    .result h2 { font-size: 1rem; }
+    pre.result-block {
+      background: #8888111a; border: 1px solid #8886; border-radius: 8px;
+      padding: 1rem; overflow-x: auto; font-size: .8rem; line-height: 1.45;
+    }
+  </style>
+</head>
+<body>
+  <h1>Hostel Room Assignment</h1>
+  <p class="sub">
+    Edit the room and guest lists below (JSON), then assign. Hard rules: gender,
+    capacity, budget, accessibility, shared language. Preferences (floor, room type,
+    packing, groups) are optimized automatically.
+  </p>
+
+  <form method="post" action="/assign">
+    <div class="editors">
+      <div>
+        <h2>Rooms</h2>
+        <textarea name="rooms" spellcheck="false">{{ rooms_json }}</textarea>
+      </div>
+      <div>
+        <h2>Customers</h2>
+        <textarea name="customers" spellcheck="false">{{ customers_json }}</textarea>
+      </div>
+    </div>
+    <div class="actions">
+      <button type="submit">Assign rooms</button>
+    </div>
+  </form>
+
+  {% if error %}
+    <div class="error"><strong>Could not run assignment:</strong> {{ error }}</div>
+  {% endif %}
+
+  {% if result %}
+    <div class="result">
+      <h2>Result</h2>
+      <pre class="result-block">{{ result }}</pre>
+    </div>
+  {% endif %}
+</body>
+</html>
